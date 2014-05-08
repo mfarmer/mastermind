@@ -7,7 +7,6 @@ class Game
   end
 
   def print_intro
-    #p @computer_choice
     puts "+------------------------------------+"
     puts "|            Mastermind              |"
     puts "+------------------------------------+"
