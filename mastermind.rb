@@ -20,7 +20,8 @@ class Game
   def prompt_for_user_choice
     puts "\nRemaining turns: #{@turn_limit}"
     print ":> "
-    @user_choice = gets.chomp.downcase.squeeze(' ').split('').map(&:to_sym)
+    @user_choice = gets.chomp.downcase.squeeze(' ').split('').map(&:to_sym)[0...4]
+    puts "Your choice: #{@user_choice}"
     @user_choice
   end
 
