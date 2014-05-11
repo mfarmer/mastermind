@@ -1,4 +1,5 @@
 # Mastermind
+require 'debugger'
 class Game
 
   def initialize(turn_limit = 10)
@@ -26,11 +27,12 @@ class Game
 
   def play
     print_intro
+    p @computer_choice
     while prompt_for_user_choice != @computer_choice && @turn_limit > 0
       provide_game_hints
       @turn_limit -= 1
     end
-    if @turn_limit > 0
+    if @turn_limit > -1
       puts "Congratulations."
     else
       puts "Sorry, the answer was #{@computer_choice}"
@@ -38,28 +40,31 @@ class Game
   end
 
   def provide_game_hints
+    #debugger
     exact_matches_count = near_matches_count = 0
-
-    4.times do |index|
-      if @user_choice[index] == @computer_choice[index]
-        exact_matches_count += 1
-      else
-        near_matches_count = find_near_matches(index)
-      end
-    end
-    puts "Exact Matches: #{exact_matches_count}, Near Matches: #{near_matches_count}"
-  end
-
-  def find_near_matches(index)
     taken = Array.new(4,false)
-    count = 0
-    @computer_choice.each_with_index do |value,i|
-      if value == @user_choice[index] && !taken[i]
-        count += 1
+
+    non_matched = []
+
+    4.times do |i|
+      if @user_choice[i] == @computer_choice[i]
+        exact_matches_count += 1
         taken[i] = true
       end
     end
-    count
+
+    @user_choice.each_with_index do |user_letter,i|
+      if !taken[i]
+        @computer_choice.each_with_index do |computer_letter,j|
+          if user_letter == computer_letter && !taken[j]
+            near_matches_count += 1
+            taken[j] = true
+          end
+        end
+      end
+    end
+
+    puts "Exact Matches: #{exact_matches_count}, Near Matches: #{near_matches_count}"
   end
 
 end
